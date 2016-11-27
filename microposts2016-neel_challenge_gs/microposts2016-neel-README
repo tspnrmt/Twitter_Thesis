@@ -1,0 +1,11 @@
+This package contains: 
+-  NEEL2016-X-gold.tsv : annotations in the NEEL format*
+-  NEEL2016-X-tweets-ids.tsv : ids of the tweets used to build the GS
+
+X= [training, dev, test]
+
+The NEEL2016-X-gold.tsv structure is as follows:
+tweet_id	startOffset	endOffset	uri confidence_score	type
+
+While the NEEL2016-X-tweets-ids.tsv is as follows:
+tweet_id
