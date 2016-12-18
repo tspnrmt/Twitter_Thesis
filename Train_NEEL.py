@@ -1,4 +1,5 @@
 from twython import Twython, TwythonError
+from time import sleep
 
 import csv
 
@@ -19,30 +20,59 @@ twitter.verify_credentials()
 #print(tweet['text'][93:101])
 
 
-with open("microposts2016-neel-test_neel.gs") as file:
+with open("microposts2016-neel-training_neel.gs") as file:
     lines = []
     index = 0
+    index_error = 0
     lines_with_texts = []
     for line in file:
         # The rstrip method gets rid of the "\n" at the end of each line
         lines.append(line.rstrip().split('\t'))
-        #print(lines[index][0])
+        #print(lines[index][0] )
         try:
             tweet = twitter.show_status(id=lines[index][0])
             #print(tweet['text'])
+            temp_NER = ''
+            if (lines[index][5] == 'Person'):
+                temp_NER = '1'
+            elif (lines[index][5] == 'Thing'):
+                temp_NER = '2'
+            elif (lines[index][5] == 'Organization'):
+                temp_NER = '3'
+            elif (lines[index][5] == 'Location'):
+                temp_NER = '4'
+            elif (lines[index][5] == 'Product'):
+                temp_NER = '5'
+            elif (lines[index][5] == 'Event'):
+                temp_NER = '6'
+            elif (lines[index][5] == 'Character'):
+                temp_NER = '7'
+
+            #else:
+            #    temp_NER = lines[index][5]
+
             lines_with_texts.append( tweet['text'] +  '\t' +  tweet['text'][int(lines[index][1]):int(lines[index][2])] +  '\t' +
-                                     lines[index][5])
+                                     temp_NER)
             #tweet['text'] [int(lines[index][1]):int(lines[index][2]])
             index = index + 1
-        except (TwythonError, AttributeError):
+        except TwythonError as e:
             #print("Not valid ID")
+            print (e)
             index = index + 1
+            index_error = index_error + 1
+        except  AttributeError as a:
+            print (a)
+            index = index + 1
+            index_error = index_error + 1
         if(index%50 == 0):
             print(index)
+            print(index_error)
+        if (index%900 == 0):
+            sleep(16*60)
         #if(index == 5):
         #    break
 
-    thefile = open('test.txt', 'w')
+    thefile = open('microposts2016-neel-training_neel1.txt', 'w')
     for item in lines_with_texts:
         thefile.write("%s\n" % item)
 
