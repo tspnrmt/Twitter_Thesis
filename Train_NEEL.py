@@ -1,9 +1,11 @@
 from twython import Twython, TwythonError
-from time import sleep
+import time
 
 import csv
 
-print('Hello')
+print('Hello ' + time.ctime())
+
+
 CONSUMER_KEY = "nQNq8qkBd538vOhNehrTiB5bz"
 CONSUMER_SECRET = "NLK5iq6e5vKxt5MLc3KaGVRz0NhS7yu3oKPgsVRZj19y32rEJF"
 OAUTH_TOKEN = "350186026-mQH1ORAmQck4Aqrltk1eN5iTbLoF1MlEzmtFpPjL"
@@ -25,6 +27,8 @@ with open("microposts2016-neel-training_neel.gs") as file:
     index = 0
     index_error = 0
     lines_with_texts = []
+
+
     for line in file:
         # The rstrip method gets rid of the "\n" at the end of each line
         lines.append(line.rstrip().split('\t'))
@@ -47,12 +51,17 @@ with open("microposts2016-neel-training_neel.gs") as file:
                 temp_NER = '6'
             elif (lines[index][5] == 'Character'):
                 temp_NER = '7'
-
+            temp_NER = lines[index][5]
             #else:
             #    temp_NER = lines[index][5]
 
-            lines_with_texts.append( tweet['text'] +  '\t' +  tweet['text'][int(lines[index][1]):int(lines[index][2])] +  '\t' +
-                                     temp_NER)
+            #lines_with_texts.append( tweet['text'] +  '\t' +  tweet['text'][int(lines[index][1]):int(lines[index][2])] +  '\t' +
+            #                         temp_NER)
+            print(tweet)
+            lines_with_texts.append(
+                lines[index][0] + '\t' + tweet['text'] + '\t' + lines[index][1] + '\t' + lines[index][2] + '\t' +
+                temp_NER + '\t' +  str(tweet['retweet_count'])  + '\t' +  str(tweet['favorite_count']) + '\t' +
+                tweet['text'] [int(lines[index][1]):int(lines[index][2])])
             #tweet['text'] [int(lines[index][1]):int(lines[index][2]])
             index = index + 1
         except TwythonError as e:
@@ -67,14 +76,17 @@ with open("microposts2016-neel-training_neel.gs") as file:
         if(index%50 == 0):
             print(index)
             print(index_error)
-        if (index%900 == 0):
-            sleep(16*60)
-        #if(index == 5):
+        if ( index != 0 and index%900 == 0):
+            print('Sleep --> ' + time.ctime())
+            time.sleep(16*60)
+            print('<-- Sleep '+ time.ctime())
+        #if(index == 125):
         #    break
 
-    thefile = open('microposts2016-neel-training_neel1.txt', 'w')
+    thefile = open('microposts2016-neel-training_neel2.txt', 'w')
     for item in lines_with_texts:
         thefile.write("%s\n" % item)
+
 
 
 
