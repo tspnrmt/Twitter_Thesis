@@ -22,7 +22,7 @@ twitter.verify_credentials()
 #print(tweet['text'][93:101])
 
 
-with open("microposts2016-neel-training_neel.gs") as file:
+with open("microposts2016-neel-test_neel.gs") as file:
     lines = []
     index = 0
     index_error = 0
@@ -79,11 +79,17 @@ with open("microposts2016-neel-training_neel.gs") as file:
         if ( index != 0 and index%900 == 0):
             print('Sleep --> ' + time.ctime())
             time.sleep(16*60)
+            twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+            twitter = Twython(app_key=CONSUMER_KEY,
+                              app_secret=CONSUMER_SECRET,
+                              oauth_token=OAUTH_TOKEN,
+                              oauth_token_secret=OAUTH_TOKEN_SECRET)
+            twitter.verify_credentials()
             print('<-- Sleep '+ time.ctime())
         #if(index == 125):
         #    break
 
-    thefile = open('microposts2016-neel-training_neel2.txt', 'w')
+    thefile = open('microposts2016-neel-test_neel4.txt', 'w')
     for item in lines_with_texts:
         thefile.write("%s\n" % item)
 
